@@ -611,8 +611,43 @@
       const isDark = document.body.classList.contains('dark-mode');
       icon.textContent = isDark ? '☀️' : '🌙';
       
+      // Update gradient backgrounds for dark mode
+      updateDarkModeGradients(isDark);
+      
       // Save preference
       localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    }
+    
+    // Update gradient backgrounds for dark/light mode
+    function updateDarkModeGradients(isDark) {
+      // Home page "Why Farmers Choose Us" tiles
+      const homeCards = document.querySelectorAll('#home-page .card-hover.bg-gradient-to-br');
+      homeCards.forEach(card => {
+        if (isDark) {
+          if (card.classList.contains('from-green-50') && card.classList.contains('to-green-100')) {
+            card.style.background = 'linear-gradient(to bottom right, rgba(6, 78, 59, 0.4), rgba(5, 150, 105, 0.3))';
+          } else if (card.classList.contains('from-orange-50') && card.classList.contains('to-orange-100')) {
+            card.style.background = 'linear-gradient(to bottom right, rgba(124, 45, 18, 0.4), rgba(154, 52, 18, 0.3))';
+          } else if (card.classList.contains('from-green-50') && card.classList.contains('to-orange-100')) {
+            card.style.background = 'linear-gradient(to bottom right, rgba(6, 78, 59, 0.4), rgba(154, 52, 18, 0.3))';
+          }
+        } else {
+          // Reset to original Tailwind classes (remove inline style)
+          card.style.background = '';
+        }
+      });
+      
+      // Dashboard recent analysis cards
+      const dashboardCards = document.querySelectorAll('#dashboard-page .card-hover.bg-gradient-to-br');
+      dashboardCards.forEach(card => {
+        if (isDark) {
+          if (card.classList.contains('from-red-50') && card.classList.contains('to-orange-50')) {
+            card.style.background = 'linear-gradient(to bottom right, rgba(127, 29, 29, 0.4), rgba(124, 45, 18, 0.3))';
+          }
+        } else {
+          card.style.background = '';
+        }
+      });
     }
     
     // Load dark mode preference
@@ -622,6 +657,8 @@
         document.body.classList.add('dark-mode');
         const icon = document.getElementById('dark-mode-icon');
         if (icon) icon.textContent = '☀️';
+        // Update gradients after a short delay to ensure DOM is ready
+        setTimeout(() => updateDarkModeGradients(true), 100);
       }
     }
     
@@ -697,6 +734,12 @@
         statsElements[1].textContent = healthyCount;
         statsElements[2].textContent = issuesCount;
         statsElements[3].textContent = avgHealth + '%';
+      }
+      
+      // Apply dark mode styling to newly created cards if dark mode is enabled
+      const isDark = document.body.classList.contains('dark-mode');
+      if (isDark) {
+        updateDarkModeGradients(true);
       }
     }
 
