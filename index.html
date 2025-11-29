@@ -4,284 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agrovision - Future of Farming</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    
-    * {
-      box-sizing: border-box;
-    }
-    
-    .page {
-      display: none;
-      min-height: 100%;
-    }
-    
-    .page.active {
-      display: block;
-      animation: slideIn 0.4s ease-out;
-    }
-    
-    @keyframes slideIn {
-      from { 
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .hero-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.15) 0%, transparent 50%);
-    }
-    
-    .card-hover {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .card-hover:hover {
-      transform: translateY(-12px) scale(1.02);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    
-    .nav-item {
-      position: relative;
-      transition: color 0.3s ease;
-    }
-    
-    .nav-item::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #22c55e, #f97316);
-      transition: width 0.3s ease;
-    }
-    
-    .nav-item:hover::after {
-      width: 100%;
-    }
-    
-    .upload-area {
-      border: 3px dashed #d1d5db;
-      transition: all 0.3s ease;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.03) 0%, rgba(249, 115, 22, 0.03) 100%);
-    }
-    
-    .upload-area:hover {
-      border-color: #22c55e;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(249, 115, 22, 0.08) 100%);
-      transform: scale(1.01);
-    }
-    
-    .upload-area.drag-active {
-      border-color: #f97316;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(249, 115, 22, 0.12) 100%);
-      transform: scale(1.02);
-    }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #22c55e 0%, #f97316 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .btn-gradient {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-gradient:hover {
-      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.4);
-    }
-    
-    .btn-gradient-orange {
-      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-gradient-orange:hover {
-      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.4);
-    }
-    
-    .feature-icon {
-      transition: transform 0.3s ease;
-    }
-    
-    .card-hover:hover .feature-icon {
-      transform: scale(1.2) rotate(5deg);
-    }
-    
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    
-    .gallery-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(249, 115, 22, 0.8) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-    
-    .gallery-item:hover::before {
-      opacity: 1;
-    }
-    
-    .gallery-item:hover {
-      transform: scale(1.05);
-    }
-    
-    .stat-number {
-      font-size: 3rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-    
-    .sidebar-nav {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 40;
-      padding: 1rem;
-    }
-    
-    .sidebar-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #d1d5db;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .sidebar-dot:hover,
-    .sidebar-dot.active {
-      background: linear-gradient(135deg, #22c55e 0%, #f97316 100%);
-      transform: scale(1.5);
-    }
-    
-    /* Dark Mode Styles */
-    body.dark-mode {
-      background-color: #0f172a;
-      color: #e2e8f0;
-    }
-    
-    body.dark-mode .bg-white {
-      background-color: #1e293b !important;
-    }
-    
-    body.dark-mode .bg-gray-50 {
-      background-color: #0f172a !important;
-    }
-    
-    body.dark-mode .text-gray-900,
-    body.dark-mode .text-gray-800,
-    body.dark-mode .text-gray-700 {
-      color: #e2e8f0 !important;
-    }
-    
-    body.dark-mode .text-gray-600 {
-      color: #94a3b8 !important;
-    }
-    
-    body.dark-mode .border-gray-100 {
-      border-color: #334155 !important;
-    }
-    
-    body.dark-mode .border-gray-200 {
-      border-color: #334155 !important;
-    }
-    
-    body.dark-mode .bg-gray-100 {
-      background-color: #1e293b !important;
-    }
-    
-    body.dark-mode .bg-gray-200 {
-      background-color: #334155 !important;
-    }
-    
-    body.dark-mode header {
-      background-color: rgba(30, 41, 59, 0.95) !important;
-    }
-    
-    body.dark-mode .hero-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
-    }
-    
-    .dark-mode-toggle {
-      position: fixed;
-      top: 50%;
-      right: 2rem;
-      transform: translateY(-50%);
-      z-index: 40;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #22c55e 0%, #f97316 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .dark-mode-toggle:hover {
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-    }
-    
-    .dark-mode-toggle span {
-      font-size: 28px;
-      transition: transform 0.3s ease;
-    }
-    
-    .dark-mode-toggle:hover span {
-      transform: rotate(20deg);
-    }
-  </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
  </head>
  <body class="bg-gray-50"><!-- Dark Mode Toggle -->
   <div class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode"><span id="dark-mode-icon">🌙</span>
   </div><!-- Floating Sidebar Navigation -->
-  <div class="sidebar-nav hidden md:block">
+    <div class="sidebar-nav hidden md:block">
    <div class="flex flex-col space-y-4">
-    <div class="sidebar-dot active" onclick="navigateTo('home', event)" title="Home"></div>
-    <div class="sidebar-dot" onclick="navigateTo('features', event)" title="Features"></div>
-    <div class="sidebar-dot" onclick="navigateTo('analyze', event)" title="Analyze"></div>
-    <div class="sidebar-dot" onclick="navigateTo('gallery', event)" title="Gallery"></div>
-    <div class="sidebar-dot" onclick="navigateTo('contact', event)" title="Contact"></div>
-    <div class="sidebar-dot" onclick="navigateTo('login', event)" title="Login"></div>
+    <div class="sidebar-dot active" onclick="navigateTo('home', event)" data-title-en="Home" data-title-az="Ana Səhifə" title="Home"></div>
+    <div class="sidebar-dot" onclick="navigateTo('features', event)" data-title-en="Features" data-title-az="Xüsusiyyətlər" title="Features"></div>
+    <div class="sidebar-dot" onclick="navigateTo('analyze', event)" data-title-en="Analyze" data-title-az="Təhlil" title="Analyze"></div>
+    <div class="sidebar-dot" onclick="navigateTo('gallery', event)" data-title-en="Gallery" data-title-az="Qalereya" title="Gallery"></div>
+    <div class="sidebar-dot" onclick="navigateTo('contact', event)" data-title-en="Contact" data-title-az="Əlaqə" title="Contact"></div>
+    <div class="sidebar-dot" onclick="navigateTo('login', event)" data-title-en="Login" data-title-az="Daxil Ol" title="Login"></div>
    </div>
   </div><!-- Top Navigation -->
   <header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm shadow-sm z-50">
@@ -292,8 +30,8 @@
        A
       </div><span id="nav-title" class="text-2xl font-bold gradient-text">Agrovision</span>
      </div>
-     <div class="hidden md:flex items-center space-x-8"><a href="#home" class="nav-item text-gray-700 font-medium" onclick="navigateTo('home', event)">Home</a> <a href="#features" class="nav-item text-gray-700 font-medium" onclick="navigateTo('features', event)">Features</a> <a href="#analyze" class="nav-item text-gray-700 font-medium" onclick="navigateTo('analyze', event)">Analyze</a> <a href="#dashboard" class="nav-item text-gray-700 font-medium" onclick="navigateTo('dashboard', event)">Dashboard</a> <a href="#gallery" class="nav-item text-gray-700 font-medium" onclick="navigateTo('gallery', event)">Gallery</a> <a href="#contact" class="nav-item text-gray-700 font-medium" onclick="navigateTo('contact', event)">Contact</a>
-     </div><button class="btn-gradient-orange text-white px-6 py-2.5 rounded-full font-semibold" onclick="navigateTo('login', event)"> Sign In </button>
+     <div class="hidden md:flex items-center space-x-8"><a href="#home" class="nav-item text-gray-700 font-medium" data-i18n="nav.home" onclick="navigateTo('home', event)">Home</a> <a href="#features" class="nav-item text-gray-700 font-medium" data-i18n="nav.features" onclick="navigateTo('features', event)">Features</a> <a href="#analyze" class="nav-item text-gray-700 font-medium" data-i18n="nav.analyze" onclick="navigateTo('analyze', event)">Analyze</a> <a href="#dashboard" class="nav-item text-gray-700 font-medium" data-i18n="nav.dashboard" onclick="navigateTo('dashboard', event)">Dashboard</a> <a href="#gallery" class="nav-item text-gray-700 font-medium" data-i18n="nav.gallery" onclick="navigateTo('gallery', event)">Gallery</a> <a href="#contact" class="nav-item text-gray-700 font-medium" data-i18n="nav.contact" onclick="navigateTo('contact', event)">Contact</a>
+     </div><div class="flex items-center space-x-4"><div class="relative"><button id="lang-switcher" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-semibold transition flex items-center space-x-2" onclick="toggleLanguageMenu()"><span id="current-lang">EN</span><span>▼</span></button><div id="lang-menu" class="hidden absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50 min-w-[120px]"><button class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700 font-medium" onclick="switchLanguage('en')">🇬🇧 English</button><button class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700 font-medium" onclick="switchLanguage('az')">🇦🇿 Azərbaycanca</button></div></div><button id="sign-in-btn" class="btn-gradient-orange text-white px-6 py-2.5 rounded-full font-semibold" onclick="navigateTo('login', event)"> Sign In </button></div>
     </div>
    </nav>
   </header><!-- Home Page -->
@@ -305,15 +43,15 @@
        🚀 AI-Powered Agriculture
       </div>
       <h1 id="hero-tagline" class="text-6xl font-extrabold text-gray-900 mb-6 leading-tight">Future of <span class="gradient-text">Farming</span></h1>
-      <p id="hero-description" class="text-xl text-gray-600 mb-8 leading-relaxed">Revolutionize your agricultural practices with cutting-edge AI technology. Monitor, analyze, and optimize your crops like never before.</p>
-      <div class="flex flex-wrap gap-4"><button id="cta-button" class="btn-gradient text-white px-8 py-4 rounded-full font-bold text-lg" onclick="navigateTo('analyze', event)"> Start Free Trial </button> <button class="bg-white text-gray-700 px-8 py-4 rounded-full font-bold text-lg border-2 border-gray-200 hover:border-green-500 transition" onclick="navigateTo('features', event)"> Learn More </button>
+      <p id="hero-description" class="text-xl text-gray-600 mb-8 leading-relaxed" data-i18n="home.heroDescription">Revolutionize your agricultural practices with cutting-edge AI technology. Monitor, analyze, and optimize your crops like never before.</p>
+      <div class="flex flex-wrap gap-4"><button id="cta-button" class="btn-gradient text-white px-8 py-4 rounded-full font-bold text-lg" onclick="navigateTo('analyze', event)" data-i18n="home.startTrial"> Start Free Trial </button> <button class="bg-white text-gray-700 px-8 py-4 rounded-full font-bold text-lg border-2 border-gray-200 hover:border-green-500 transition" onclick="navigateTo('features', event)" data-i18n="home.learnMore"> Learn More </button>
       </div><!-- Stats -->
       <div class="grid grid-cols-3 gap-6 mt-12">
        <div>
         <div class="stat-number gradient-text">
          50K+
         </div>
-        <div class="text-gray-600 font-medium">
+        <div class="text-gray-600 font-medium" data-i18n="home.activeFarms">
          Active Farms
         </div>
        </div>
@@ -321,7 +59,7 @@
         <div class="stat-number gradient-text">
          98%
         </div>
-        <div class="text-gray-600 font-medium">
+        <div class="text-gray-600 font-medium" data-i18n="home.accuracy">
          Accuracy
         </div>
        </div>
@@ -329,7 +67,7 @@
         <div class="stat-number gradient-text">
          24/7
         </div>
-        <div class="text-gray-600 font-medium">
+        <div class="text-gray-600 font-medium" data-i18n="home.monitoring">
          Monitoring
         </div>
        </div>
@@ -350,30 +88,30 @@
    <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
      <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Farmers Choose Us</h2>
-      <p class="text-xl text-gray-600">Powerful tools designed for modern agriculture</p>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4" data-i18n="homeFeatures.title">Why Farmers Choose Us</h2>
+      <p class="text-xl text-gray-600" data-i18n="homeFeatures.subtitle">Powerful tools designed for modern agriculture</p>
      </div>
      <div class="grid md:grid-cols-3 gap-8">
       <div class="card-hover bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-2 border-green-200">
        <div class="feature-icon text-6xl mb-4">
         🎯
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-3">Precision Analysis</h3>
-       <p class="text-gray-700">Advanced AI algorithms detect issues before they become problems</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="homeFeatures.precisionAnalysis">Precision Analysis</h3>
+       <p class="text-gray-700" data-i18n="homeFeatures.precisionAnalysisDesc">Advanced AI algorithms detect issues before they become problems</p>
       </div>
       <div class="card-hover bg-gradient-to-br from-orange-50 to-orange-100 p-8 rounded-2xl border-2 border-orange-200">
        <div class="feature-icon text-6xl mb-4">
         ⚡
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-3">Real-Time Insights</h3>
-       <p class="text-gray-700">Get instant feedback and actionable recommendations</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="homeFeatures.realTimeInsights">Real-Time Insights</h3>
+       <p class="text-gray-700" data-i18n="homeFeatures.realTimeInsightsDesc">Get instant feedback and actionable recommendations</p>
       </div>
       <div class="card-hover bg-gradient-to-br from-green-50 to-orange-100 p-8 rounded-2xl border-2 border-green-200">
        <div class="feature-icon text-6xl mb-4">
         💰
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-3">Maximize Profits</h3>
-       <p class="text-gray-700">Increase yields by up to 40% with smart farming</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="homeFeatures.maximizeProfits">Maximize Profits</h3>
+       <p class="text-gray-700" data-i18n="homeFeatures.maximizeProfitsDesc">Increase yields by up to 40% with smart farming</p>
       </div>
      </div>
     </div>
@@ -383,51 +121,51 @@
    <section class="py-20 min-h-screen">
     <div class="max-w-7xl mx-auto px-6">
      <div class="text-center mb-16">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Powerful <span class="gradient-text">Features</span></h1>
-      <p class="text-xl text-gray-600">Everything you need to transform your farm</p>
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span data-i18n="features.title">Powerful</span> <span class="gradient-text">Features</span></h1>
+      <p class="text-xl text-gray-600" data-i18n="features.subtitle">Everything you need to transform your farm</p>
      </div>
      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         🔬
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Disease Detection</h3>
-       <p class="text-gray-600 leading-relaxed">Identify plant diseases instantly with 98% accuracy using advanced computer vision</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.diseaseDetection">Disease Detection</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.diseaseDetectionDesc">Identify plant diseases instantly with 98% accuracy using advanced computer vision</p>
       </div>
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         💧
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Smart Irrigation</h3>
-       <p class="text-gray-600 leading-relaxed">Optimize water usage with AI-driven irrigation scheduling and soil moisture analysis</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.smartIrrigation">Smart Irrigation</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.smartIrrigationDesc">Optimize water usage with AI-driven irrigation scheduling and soil moisture analysis</p>
       </div>
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         🌡️
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Weather Forecasting</h3>
-       <p class="text-gray-600 leading-relaxed">Hyperlocal weather predictions to plan your farming activities perfectly</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.weatherForecasting">Weather Forecasting</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.weatherForecastingDesc">Hyperlocal weather predictions to plan your farming activities perfectly</p>
       </div>
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         📊
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Yield Analytics</h3>
-       <p class="text-gray-600 leading-relaxed">Predict harvest outcomes and optimize crop rotation strategies</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.yieldAnalytics">Yield Analytics</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.yieldAnalyticsDesc">Predict harvest outcomes and optimize crop rotation strategies</p>
       </div>
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         🛰️
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Satellite Mapping</h3>
-       <p class="text-gray-600 leading-relaxed">Monitor large-scale farms with satellite imagery and drone integration</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.satelliteMapping">Satellite Mapping</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.satelliteMappingDesc">Monitor large-scale farms with satellite imagery and drone integration</p>
       </div>
       <div class="card-hover bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
        <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center text-3xl mb-6">
         🤝
        </div>
-       <h3 class="text-2xl font-bold text-gray-900 mb-4">Expert Support</h3>
-       <p class="text-gray-600 leading-relaxed">24/7 access to agricultural experts and AI-powered recommendations</p>
+       <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="features.expertSupport">Expert Support</h3>
+       <p class="text-gray-600 leading-relaxed" data-i18n="features.expertSupportDesc">24/7 access to agricultural experts and AI-powered recommendations</p>
       </div>
      </div>
     </div>
@@ -437,8 +175,8 @@
    <section class="py-20 min-h-screen">
     <div class="max-w-5xl mx-auto px-6">
      <div class="text-center mb-12">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span class="gradient-text">AI Analysis</span> Studio</h1>
-      <p class="text-xl text-gray-600">Upload your crop images for instant professional analysis</p>
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span class="gradient-text" data-i18n="analyze.title">AI Analysis</span> <span data-i18n="analyze.studio">Studio</span></h1>
+      <p class="text-xl text-gray-600" data-i18n="analyze.subtitle">Upload your crop images for instant professional analysis</p>
      </div>
      <div class="bg-white rounded-3xl shadow-2xl p-10 border-2 border-gray-100">
       <div id="upload-area" class="upload-area rounded-2xl p-16 text-center cursor-pointer">
@@ -446,25 +184,25 @@
         <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-orange-400 rounded-full flex items-center justify-center text-5xl mx-auto mb-6">
          📷
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Drop Your Image Here</h3>
-        <p class="text-gray-600 mb-6 text-lg">or click to browse from your device</p><input type="file" id="file-input" accept="image/*" class="hidden"> <button onclick="document.getElementById('file-input').click()" class="btn-gradient text-white px-8 py-4 rounded-full font-bold text-lg"> Choose File </button>
-        <p class="text-sm text-gray-500 mt-4">Supports: JPG, PNG, WebP (Max 10MB)</p>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="analyze.dropImage">Drop Your Image Here</h3>
+        <p class="text-gray-600 mb-6 text-lg" data-i18n="analyze.clickBrowse">or click to browse from your device</p><input type="file" id="file-input" accept="image/*" class="hidden"> <button onclick="document.getElementById('file-input').click()" class="btn-gradient text-white px-8 py-4 rounded-full font-bold text-lg" data-i18n="analyze.chooseFile"> Choose File </button>
+        <p class="text-sm text-gray-500 mt-4" data-i18n="analyze.supports">Supports: JPG, PNG, WebP (Max 10MB)</p>
        </div>
        <div id="preview-section" class="hidden"><img id="image-preview" class="max-w-full max-h-96 mx-auto rounded-xl shadow-lg mb-6">
-        <div class="flex justify-center gap-4"><button onclick="resetUpload()" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition"> Remove Image </button> <button onclick="analyzeImage()" class="btn-gradient-orange text-white px-8 py-3 rounded-full font-bold"> 🔍 Analyze Now </button>
+        <div class="flex justify-center gap-4"><button onclick="resetUpload()" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition" data-i18n="analyze.removeImage"> Remove Image </button> <button onclick="analyzeImage()" class="btn-gradient-orange text-white px-8 py-3 rounded-full font-bold" data-i18n="analyze.analyzeNow"> 🔍 Analyze Now </button>
         </div>
        </div>
       </div>
       <div id="results-section" class="hidden mt-10">
        <div class="bg-gradient-to-br from-green-50 to-orange-50 rounded-2xl p-8 border-2 border-green-200">
         <div class="flex items-center justify-between mb-6">
-         <h3 class="text-2xl font-bold text-gray-900">Analysis Complete ✓</h3><span class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold">98% Confidence</span>
+         <h3 class="text-2xl font-bold text-gray-900" data-i18n="analyze.analysisComplete">Analysis Complete ✓</h3><span id="confidence-badge" class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold">98% Confidence</span>
         </div>
-        <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
          <div class="bg-white rounded-xl p-6 shadow">
-          <div class="flex items-center justify-between mb-2"><span class="text-gray-700 font-semibold">Crop Health</span> <span class="text-2xl">💚</span>
+          <div class="flex items-center justify-between mb-2"><span class="text-gray-700 font-semibold" data-i18n="analyze.cropHealth">Crop Health</span> <span class="text-2xl">💚</span>
           </div>
-          <div class="text-3xl font-bold text-green-600">
+          <div class="text-3xl font-bold text-green-600" id="health-status">
            Excellent
           </div>
           <div class="w-full bg-gray-200 rounded-full h-3 mt-3">
@@ -472,19 +210,24 @@
           </div>
          </div>
          <div class="bg-white rounded-xl p-6 shadow">
-          <div class="flex items-center justify-between mb-2"><span class="text-gray-700 font-semibold">Disease Risk</span> <span class="text-2xl">🛡️</span>
+          <div class="flex items-center justify-between mb-2"><span class="text-gray-700 font-semibold" data-i18n="analyze.diseaseRisk">Disease Risk</span> <span class="text-2xl">🛡️</span>
           </div>
-          <div class="text-3xl font-bold text-green-600">
+          <div class="text-3xl font-bold text-green-600" id="disease-risk">
            Low
           </div>
           <div class="w-full bg-gray-200 rounded-full h-3 mt-3">
            <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full" style="width: 15%"></div>
           </div>
          </div>
+         <div class="bg-white rounded-xl p-6 shadow text-center">
+          <h4 class="font-bold text-gray-900 mb-3" data-i18n="analyze.shareQR">Share Analysis</h4>
+          <div id="qrcode" class="flex justify-center mb-3" style="min-height: 200px;"></div>
+          <p class="text-sm text-gray-600" data-i18n="analyze.scanQR">Scan to view analysis</p>
+         </div>
         </div>
         <div class="grid md:grid-cols-2 gap-6 mb-6">
          <div class="bg-white rounded-xl p-6 shadow">
-          <div class="text-gray-700 font-semibold mb-2">
+          <div class="text-gray-700 font-semibold mb-2" data-i18n="analyze.growthStage">
            Growth Stage
           </div>
           <div class="text-xl font-bold text-gray-900">
@@ -492,7 +235,7 @@
           </div>
          </div>
          <div class="bg-white rounded-xl p-6 shadow">
-          <div class="text-gray-700 font-semibold mb-2">
+          <div class="text-gray-700 font-semibold mb-2" data-i18n="analyze.estimatedYield">
            Estimated Yield
           </div>
           <div class="text-xl font-bold text-gray-900">
@@ -501,7 +244,7 @@
          </div>
         </div>
         <div class="bg-white rounded-xl p-6 shadow">
-         <h4 class="font-bold text-gray-900 mb-3 flex items-center"><span class="text-2xl mr-2">💡</span> AI Recommendations</h4>
+         <h4 class="font-bold text-gray-900 mb-3 flex items-center"><span class="text-2xl mr-2">💡</span> <span data-i18n="analyze.aiRecommendations">AI Recommendations</span></h4>
          <ul class="space-y-2 text-gray-700">
           <li class="flex items-start"><span class="text-green-500 mr-2">✓</span> <span>Continue current irrigation schedule - soil moisture levels are optimal</span></li>
           <li class="flex items-start"><span class="text-green-500 mr-2">✓</span> <span>Consider nitrogen-rich fertilizer application in 7-10 days</span></li>
@@ -518,54 +261,54 @@
    <section class="py-20 min-h-screen">
     <div class="max-w-7xl mx-auto px-6">
      <div class="mb-12">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Your <span class="gradient-text">Dashboard</span></h1>
-      <p class="text-xl text-gray-600">Track your crop analysis history and insights</p>
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span data-i18n="dashboard.title">Your</span> <span class="gradient-text">Dashboard</span></h1>
+      <p class="text-xl text-gray-600" data-i18n="dashboard.subtitle">Track your crop analysis history and insights</p>
      </div><!-- Stats Overview -->
      <div class="grid md:grid-cols-4 gap-6 mb-12">
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold">Total Scans</span> <span class="text-3xl">📊</span>
+       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold" data-i18n="dashboard.totalScans">Total Scans</span> <span class="text-3xl">📊</span>
        </div>
        <div class="text-4xl font-bold gradient-text">
         24
        </div>
-       <div class="text-sm text-gray-500 mt-2">
+       <div class="text-sm text-gray-500 mt-2" data-i18n="dashboard.thisWeek">
         +3 this week
        </div>
       </div>
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold">Healthy Crops</span> <span class="text-3xl">✅</span>
+       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold" data-i18n="dashboard.healthyCrops">Healthy Crops</span> <span class="text-3xl">✅</span>
        </div>
        <div class="text-4xl font-bold text-green-600">
         18
        </div>
-       <div class="text-sm text-gray-500 mt-2">
+       <div class="text-sm text-gray-500 mt-2" data-i18n="dashboard.successRate">
         75% success rate
        </div>
       </div>
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold">Issues Found</span> <span class="text-3xl">⚠️</span>
+       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold" data-i18n="dashboard.issuesFound">Issues Found</span> <span class="text-3xl">⚠️</span>
        </div>
        <div class="text-4xl font-bold text-orange-600">
         6
        </div>
-       <div class="text-sm text-gray-500 mt-2">
+       <div class="text-sm text-gray-500 mt-2" data-i18n="dashboard.needsAttention">
         Needs attention
        </div>
       </div>
       <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold">Avg Health</span> <span class="text-3xl">💚</span>
+       <div class="flex items-center justify-between mb-3"><span class="text-gray-600 font-semibold" data-i18n="dashboard.avgHealth">Avg Health</span> <span class="text-3xl">💚</span>
        </div>
        <div class="text-4xl font-bold text-green-600">
         87%
        </div>
-       <div class="text-sm text-gray-500 mt-2">
+       <div class="text-sm text-gray-500 mt-2" data-i18n="dashboard.excellentOverall">
         Excellent overall
        </div>
       </div>
      </div><!-- Analysis History -->
      <div class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100">
       <div class="flex items-center justify-between mb-8">
-       <h2 class="text-3xl font-bold text-gray-900">Recent Analysis</h2><button class="btn-gradient text-white px-6 py-3 rounded-full font-semibold" onclick="navigateTo('analyze', event)"> + New Scan </button>
+       <h2 class="text-3xl font-bold text-gray-900" data-i18n="dashboard.recentAnalysis">Recent Analysis</h2><button class="btn-gradient text-white px-6 py-3 rounded-full font-semibold" onclick="navigateTo('analyze', event)" data-i18n="dashboard.newScan"> + New Scan </button>
       </div>
       <div class="space-y-6"><!-- Analysis Item 1 - Tomato Late Blight -->
        <div class="card-hover bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 border-2 border-red-200">
@@ -797,44 +540,44 @@
    <section class="py-20 min-h-screen">
     <div class="max-w-7xl mx-auto px-6">
      <div class="text-center mb-16">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Success <span class="gradient-text">Stories</span></h1>
-      <p class="text-xl text-gray-600">Real results from farms around the world</p>
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span data-i18n="gallery.title">Success</span> <span class="gradient-text">Stories</span></h1>
+      <p class="text-xl text-gray-600" data-i18n="gallery.subtitle">Real results from farms around the world</p>
      </div>
      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-green-300 via-green-400 to-green-600 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🌽</span>
-        <h3 class="text-2xl font-bold mb-2">Corn Excellence</h3>
-        <p class="text-center">+45% yield increase</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.cornExcellence">Corn Excellence</h3>
+        <p class="text-center" data-i18n="gallery.yieldIncrease">+45% yield increase</p>
        </div>
       </div>
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-red-300 via-red-400 to-red-600 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🍅</span>
-        <h3 class="text-2xl font-bold mb-2">Tomato Perfection</h3>
-        <p class="text-center">Zero disease detected</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.tomatoPerfection">Tomato Perfection</h3>
+        <p class="text-center" data-i18n="gallery.zeroDisease">Zero disease detected</p>
        </div>
       </div>
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-green-400 via-green-500 to-green-700 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🥬</span>
-        <h3 class="text-2xl font-bold mb-2">Lettuce Success</h3>
-        <p class="text-center">Premium quality grade</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.lettuceSuccess">Lettuce Success</h3>
+        <p class="text-center" data-i18n="gallery.premiumQuality">Premium quality grade</p>
        </div>
       </div>
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🌾</span>
-        <h3 class="text-2xl font-bold mb-2">Wheat Triumph</h3>
-        <p class="text-center">Record harvest 2024</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.wheatTriumph">Wheat Triumph</h3>
+        <p class="text-center" data-i18n="gallery.recordHarvest">Record harvest 2024</p>
        </div>
       </div>
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-pink-300 via-red-400 to-red-600 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🍓</span>
-        <h3 class="text-2xl font-bold mb-2">Berry Brilliance</h3>
-        <p class="text-center">Organic certified</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.berryBrilliance">Berry Brilliance</h3>
+        <p class="text-center" data-i18n="gallery.organicCertified">Organic certified</p>
        </div>
       </div>
       <div class="gallery-item rounded-2xl overflow-hidden shadow-xl cursor-pointer">
        <div class="h-80 bg-gradient-to-br from-green-500 via-green-600 to-green-800 flex flex-col items-center justify-center p-8 text-white"><span class="text-8xl mb-4">🥒</span>
-        <h3 class="text-2xl font-bold mb-2">Cucumber Champion</h3>
-        <p class="text-center">Year-round production</p>
+        <h3 class="text-2xl font-bold mb-2" data-i18n="gallery.cucumberChampion">Cucumber Champion</h3>
+        <p class="text-center" data-i18n="gallery.yearRoundProduction">Year-round production</p>
        </div>
       </div>
      </div>
@@ -845,40 +588,40 @@
    <section class="py-20 min-h-screen">
     <div class="max-w-6xl mx-auto px-6">
      <div class="text-center mb-16">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Get In <span class="gradient-text">Touch</span></h1>
-      <p class="text-xl text-gray-600">We're here to help you grow</p>
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4"><span data-i18n="contact.title">Get In</span> <span class="gradient-text">Touch</span></h1>
+      <p class="text-xl text-gray-600" data-i18n="contact.subtitle">We're here to help you grow</p>
      </div>
      <div class="grid md:grid-cols-5 gap-8">
       <div class="md:col-span-3">
        <div class="bg-white rounded-3xl shadow-2xl p-10 border-2 border-gray-100">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">Send us a message</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8" data-i18n="contact.sendMessage">Send us a message</h2>
         <form id="contact-form" onsubmit="handleContactSubmit(event)">
          <div class="grid md:grid-cols-2 gap-6 mb-6">
-          <div><label for="name" class="block text-gray-700 font-semibold mb-3">Full Name</label> <input type="text" id="name" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+          <div><label for="name" class="block text-gray-700 font-semibold mb-3" data-i18n="contact.fullName">Full Name</label> <input type="text" id="name" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
           </div>
-          <div><label for="email" class="block text-gray-700 font-semibold mb-3">Email Address</label> <input type="email" id="email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+          <div><label for="email" class="block text-gray-700 font-semibold mb-3" data-i18n="contact.emailAddress">Email Address</label> <input type="email" id="email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
           </div>
          </div>
-         <div class="mb-6"><label for="subject" class="block text-gray-700 font-semibold mb-3">Subject</label> <input type="text" id="subject" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+         <div class="mb-6"><label for="subject" class="block text-gray-700 font-semibold mb-3" data-i18n="contact.subject">Subject</label> <input type="text" id="subject" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
          </div>
-         <div class="mb-6"><label for="message" class="block text-gray-700 font-semibold mb-3">Message</label> <textarea id="message" required rows="5" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition"></textarea>
-         </div><button type="submit" class="btn-gradient text-white w-full py-4 rounded-xl font-bold text-lg"> Send Message 🚀 </button>
+         <div class="mb-6"><label for="message" class="block text-gray-700 font-semibold mb-3" data-i18n="contact.message">Message</label> <textarea id="message" required rows="5" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition"></textarea>
+         </div><button type="submit" class="btn-gradient text-white w-full py-4 rounded-xl font-bold text-lg" data-i18n="contact.sendButton"> Send Message 🚀 </button>
         </form>
-        <div id="contact-success" class="hidden mt-6 p-5 bg-green-100 text-green-700 rounded-xl text-center font-semibold">
+        <div id="contact-success" class="hidden mt-6 p-5 bg-green-100 text-green-700 rounded-xl text-center font-semibold" data-i18n="contact.messageSent">
          ✓ Message sent successfully! We'll respond within 24 hours.
         </div>
        </div>
       </div>
       <div class="md:col-span-2 space-y-6">
        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl shadow-2xl p-8 text-white">
-        <h3 class="text-2xl font-bold mb-6">Contact Info</h3>
+        <h3 class="text-2xl font-bold mb-6" data-i18n="contact.contactInfo">Contact Info</h3>
         <div class="space-y-6">
          <div class="flex items-start">
           <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl mr-4">
            📧
           </div>
           <div>
-           <div class="font-semibold mb-1">
+           <div class="font-semibold mb-1" data-i18n="contact.email">
             Email
            </div>
            <div id="contact-email-display" class="text-white/90">
@@ -891,7 +634,7 @@
            📞
           </div>
           <div>
-           <div class="font-semibold mb-1">
+           <div class="font-semibold mb-1" data-i18n="contact.phone">
             Phone
            </div>
            <div id="contact-phone-display" class="text-white/90">
@@ -904,7 +647,7 @@
            📍
           </div>
           <div>
-           <div class="font-semibold mb-1">
+           <div class="font-semibold mb-1" data-i18n="contact.location">
             Location
            </div>
            <div class="text-white/90">
@@ -916,18 +659,18 @@
         </div>
        </div>
        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl shadow-2xl p-8 text-white">
-        <h3 class="text-2xl font-bold mb-4">Office Hours</h3>
+        <h3 class="text-2xl font-bold mb-4" data-i18n="contact.officeHours">Office Hours</h3>
         <div class="space-y-3">
-         <div class="flex justify-between"><span>Monday - Friday</span> <span class="font-bold">8AM - 8PM</span>
+         <div class="flex justify-between"><span data-i18n="contact.mondayFriday">Monday - Friday</span> <span class="font-bold">8AM - 8PM</span>
          </div>
-         <div class="flex justify-between"><span>Saturday</span> <span class="font-bold">9AM - 5PM</span>
+         <div class="flex justify-between"><span data-i18n="contact.saturday">Saturday</span> <span class="font-bold">9AM - 5PM</span>
          </div>
-         <div class="flex justify-between"><span>Sunday</span> <span class="font-bold">Closed</span>
+         <div class="flex justify-between"><span data-i18n="contact.sunday">Sunday</span> <span class="font-bold" data-i18n="contact.closed">Closed</span>
          </div>
         </div>
        </div>
        <div class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100">
-        <h3 class="text-xl font-bold text-gray-900 mb-4">Follow Us</h3>
+        <h3 class="text-xl font-bold text-gray-900 mb-4" data-i18n="contact.followUs">Follow Us</h3>
         <div class="flex gap-4">
          <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white text-xl cursor-pointer hover:scale-110 transition">
           f
@@ -953,374 +696,36 @@
        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-orange-500 rounded-2xl flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
         A
        </div>
-       <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Welcome Back!</h1>
-       <p class="text-gray-600">Sign in to continue to Agrovision</p>
+       <h1 class="text-3xl font-extrabold text-gray-900 mb-2" data-i18n="login.welcomeBack">Welcome Back!</h1>
+       <p class="text-gray-600" data-i18n="login.signInContinue">Sign in to continue to Agrovision</p>
       </div>
-      <div class="flex mb-8 bg-gray-100 rounded-xl p-1.5"><button id="login-tab" class="flex-1 py-3 rounded-lg font-bold transition bg-white shadow-sm text-green-600" onclick="switchAuthTab('login')"> Login </button> <button id="signup-tab" class="flex-1 py-3 rounded-lg font-bold transition text-gray-600" onclick="switchAuthTab('signup')"> Sign Up </button>
+      <div class="flex mb-8 bg-gray-100 rounded-xl p-1.5"><button id="login-tab" class="flex-1 py-3 rounded-lg font-bold transition bg-white shadow-sm text-green-600" onclick="switchAuthTab('login')" data-i18n="login.login"> Login </button> <button id="signup-tab" class="flex-1 py-3 rounded-lg font-bold transition text-gray-600" onclick="switchAuthTab('signup')" data-i18n="login.signUp"> Sign Up </button>
       </div>
       <form id="login-form" onsubmit="handleLogin(event)">
-       <div class="mb-5"><label for="login-email" class="block text-gray-700 font-semibold mb-3">Email</label> <input type="email" id="login-email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       <div class="mb-5"><label for="login-email" class="block text-gray-700 font-semibold mb-3" data-i18n="login.email">Email</label> <input type="email" id="login-email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
        </div>
-       <div class="mb-6"><label for="login-password" class="block text-gray-700 font-semibold mb-3">Password</label> <input type="password" id="login-password" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
-       </div><button type="submit" class="btn-gradient text-white w-full py-4 rounded-xl font-bold text-lg mb-4"> Sign In </button>
-       <p class="text-center text-gray-600"><a href="#" class="text-green-600 font-semibold hover:underline">Forgot password?</a></p>
+       <div class="mb-6"><label for="login-password" class="block text-gray-700 font-semibold mb-3" data-i18n="login.password">Password</label> <input type="password" id="login-password" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       </div><button type="submit" class="btn-gradient text-white w-full py-4 rounded-xl font-bold text-lg mb-4" data-i18n="login.signIn"> Sign In </button>
+       <p class="text-center text-gray-600"><a href="#" class="text-green-600 font-semibold hover:underline" data-i18n="login.forgotPassword">Forgot password?</a></p>
       </form>
       <form id="signup-form" class="hidden" onsubmit="handleSignup(event)">
-       <div class="mb-5"><label for="signup-name" class="block text-gray-700 font-semibold mb-3">Full Name</label> <input type="text" id="signup-name" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       <div class="mb-5"><label for="signup-name" class="block text-gray-700 font-semibold mb-3" data-i18n="login.fullName">Full Name</label> <input type="text" id="signup-name" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
        </div>
-       <div class="mb-5"><label for="signup-email" class="block text-gray-700 font-semibold mb-3">Email</label> <input type="email" id="signup-email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       <div class="mb-5"><label for="signup-email" class="block text-gray-700 font-semibold mb-3" data-i18n="login.email">Email</label> <input type="email" id="signup-email" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
        </div>
-       <div class="mb-5"><label for="signup-password" class="block text-gray-700 font-semibold mb-3">Password</label> <input type="password" id="signup-password" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       <div class="mb-5"><label for="signup-password" class="block text-gray-700 font-semibold mb-3" data-i18n="login.password">Password</label> <input type="password" id="signup-password" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
        </div>
-       <div class="mb-6"><label for="signup-confirm" class="block text-gray-700 font-semibold mb-3">Confirm Password</label> <input type="password" id="signup-confirm" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
-       </div><button type="submit" class="btn-gradient-orange text-white w-full py-4 rounded-xl font-bold text-lg"> Create Account </button>
+       <div class="mb-6"><label for="signup-confirm" class="block text-gray-700 font-semibold mb-3" data-i18n="login.confirmPassword">Confirm Password</label> <input type="password" id="signup-confirm" required class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition">
+       </div><button type="submit" class="btn-gradient-orange text-white w-full py-4 rounded-xl font-bold text-lg" data-i18n="login.createAccount"> Create Account </button>
       </form>
-      <div id="auth-success" class="hidden mt-6 p-5 bg-green-100 text-green-700 rounded-xl text-center font-semibold">
+      <div id="auth-success" class="hidden mt-6 p-5 bg-green-100 text-green-700 rounded-xl text-center font-semibold" data-i18n="login.successRedirect">
        ✓ Success! Redirecting to dashboard...
       </div>
      </div>
     </div>
    </section>
   </div>
-  <script>
-    const defaultConfig = {
-      site_title: "Agrovision",
-      tagline: "Future of Farming",
-      hero_description: "Revolutionize your agricultural practices with cutting-edge AI technology. Monitor, analyze, and optimize your crops like never before.",
-      cta_button: "Start Free Trial",
-      contact_email: "hello@agrovision.io",
-      contact_phone: "+1 (888) 555-FARM",
-      background_color: "#f9fafb",
-      surface_color: "#ffffff",
-      text_color: "#111827",
-      primary_action_color: "#22c55e",
-      secondary_action_color: "#f97316",
-      font_family: "Poppins",
-      font_size: 16
-    };
-
-    async function onConfigChange(config) {
-      const customFont = config.font_family || defaultConfig.font_family;
-      const baseSize = config.font_size || defaultConfig.font_size;
-      const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      
-      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
-      document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
-      
-      const navTitle = document.getElementById('nav-title');
-      if (navTitle) navTitle.textContent = config.site_title || defaultConfig.site_title;
-      
-      const heroTagline = document.getElementById('hero-tagline');
-      if (heroTagline) {
-        const taglineText = config.tagline || defaultConfig.tagline;
-        heroTagline.innerHTML = `${taglineText.split(' ')[0]} <span class="gradient-text">${taglineText.split(' ').slice(1).join(' ')}</span>`;
-        heroTagline.style.fontSize = `${baseSize * 3}px`;
-        heroTagline.style.fontFamily = `${customFont}, ${baseFontStack}`;
-      }
-      
-      const heroDescription = document.getElementById('hero-description');
-      if (heroDescription) {
-        heroDescription.textContent = config.hero_description || defaultConfig.hero_description;
-        heroDescription.style.fontSize = `${baseSize * 1.25}px`;
-      }
-      
-      const ctaButton = document.getElementById('cta-button');
-      if (ctaButton) {
-        ctaButton.textContent = config.cta_button || defaultConfig.cta_button;
-        ctaButton.style.fontSize = `${baseSize * 1.125}px`;
-      }
-      
-      const contactEmailDisplay = document.getElementById('contact-email-display');
-      if (contactEmailDisplay) contactEmailDisplay.textContent = config.contact_email || defaultConfig.contact_email;
-      
-      const contactPhoneDisplay = document.getElementById('contact-phone-display');
-      if (contactPhoneDisplay) contactPhoneDisplay.textContent = config.contact_phone || defaultConfig.contact_phone;
-      
-      const textColor = config.text_color || defaultConfig.text_color;
-      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
-      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
-      const surfaceColor = config.surface_color || defaultConfig.surface_color;
-      const bgColor = config.background_color || defaultConfig.background_color;
-      
-      document.querySelectorAll('.bg-gray-50').forEach(el => {
-        el.style.backgroundColor = bgColor;
-      });
-      
-      document.querySelectorAll('.bg-white').forEach(el => {
-        el.style.backgroundColor = surfaceColor;
-      });
-      
-      document.querySelectorAll('.text-gray-900, .text-gray-800, .text-gray-700').forEach(el => {
-        el.style.color = textColor;
-      });
-      
-      document.querySelectorAll('h1, h2, h3').forEach(el => {
-        el.style.fontFamily = `${customFont}, ${baseFontStack}`;
-        if (el.tagName === 'H1') el.style.fontSize = `${baseSize * 2.5}px`;
-        if (el.tagName === 'H2') el.style.fontSize = `${baseSize * 2}px`;
-        if (el.tagName === 'H3') el.style.fontSize = `${baseSize * 1.5}px`;
-      });
-      
-      document.querySelectorAll('p, label, button, a, input, textarea').forEach(el => {
-        el.style.fontSize = `${baseSize}px`;
-      });
-    }
-
-    function navigateTo(page, event) {
-      event.preventDefault();
-      
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(`${page}-page`).classList.add('active');
-      
-      document.querySelectorAll('.sidebar-dot').forEach(dot => dot.classList.remove('active'));
-      const dots = document.querySelectorAll('.sidebar-dot');
-      const pages = ['home', 'features', 'analyze', 'dashboard', 'gallery', 'contact', 'login'];
-      const index = pages.indexOf(page);
-      if (index >= 0 && dots[index]) {
-        dots[index].classList.add('active');
-      }
-      
-      window.location.hash = page;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function switchAuthTab(tab) {
-      const loginTab = document.getElementById('login-tab');
-      const signupTab = document.getElementById('signup-tab');
-      const loginForm = document.getElementById('login-form');
-      const signupForm = document.getElementById('signup-form');
-      
-      if (tab === 'login') {
-        loginTab.classList.add('bg-white', 'shadow-sm', 'text-green-600');
-        loginTab.classList.remove('text-gray-600');
-        signupTab.classList.remove('bg-white', 'shadow-sm', 'text-green-600');
-        signupTab.classList.add('text-gray-600');
-        loginForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-      } else {
-        signupTab.classList.add('bg-white', 'shadow-sm', 'text-green-600');
-        signupTab.classList.remove('text-gray-600');
-        loginTab.classList.remove('bg-white', 'shadow-sm', 'text-green-600');
-        loginTab.classList.add('text-gray-600');
-        signupForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-      }
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const successDiv = document.getElementById('auth-success');
-      successDiv.classList.remove('hidden');
-      setTimeout(() => {
-        navigateTo('home', event);
-        successDiv.classList.add('hidden');
-        document.getElementById('login-form').reset();
-      }, 2000);
-    }
-
-    function handleSignup(event) {
-      event.preventDefault();
-      const password = document.getElementById('signup-password').value;
-      const confirm = document.getElementById('signup-confirm').value;
-      
-      const successDiv = document.getElementById('auth-success');
-      
-      if (password !== confirm) {
-        successDiv.textContent = '✗ Passwords do not match!';
-        successDiv.classList.remove('bg-green-100', 'text-green-700');
-        successDiv.classList.add('bg-red-100', 'text-red-700');
-        successDiv.classList.remove('hidden');
-        setTimeout(() => {
-          successDiv.classList.add('hidden');
-          successDiv.classList.remove('bg-red-100', 'text-red-700');
-          successDiv.classList.add('bg-green-100', 'text-green-700');
-          successDiv.textContent = '✓ Success! Redirecting to dashboard...';
-        }, 2500);
-        return;
-      }
-      
-      successDiv.classList.remove('hidden');
-      setTimeout(() => {
-        navigateTo('home', event);
-        successDiv.classList.add('hidden');
-        document.getElementById('signup-form').reset();
-      }, 2000);
-    }
-
-    const uploadArea = document.getElementById('upload-area');
-    const fileInput = document.getElementById('file-input');
-    const uploadPrompt = document.getElementById('upload-prompt');
-    const previewSection = document.getElementById('preview-section');
-    const imagePreview = document.getElementById('image-preview');
-    const resultsSection = document.getElementById('results-section');
-
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('drag-active');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('drag-active');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('drag-active');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        displayImage(file);
-      }
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        displayImage(file);
-      }
-    });
-
-    function displayImage(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        imagePreview.src = e.target.result;
-        uploadPrompt.classList.add('hidden');
-        previewSection.classList.remove('hidden');
-        resultsSection.classList.add('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function resetUpload() {
-      fileInput.value = '';
-      uploadPrompt.classList.remove('hidden');
-      previewSection.classList.add('hidden');
-      resultsSection.classList.add('hidden');
-    }
-
-    function analyzeImage() {
-      resultsSection.classList.remove('hidden');
-      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function handleContactSubmit(event) {
-      event.preventDefault();
-      const successDiv = document.getElementById('contact-success');
-      successDiv.classList.remove('hidden');
-      setTimeout(() => {
-        successDiv.classList.add('hidden');
-        document.getElementById('contact-form').reset();
-      }, 4000);
-    }
-
-    // Dark Mode Functions
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
-      const icon = document.getElementById('dark-mode-icon');
-      const isDark = document.body.classList.contains('dark-mode');
-      icon.textContent = isDark ? '☀️' : '🌙';
-      
-      // Save preference
-      localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-    }
-    
-    // Load dark mode preference
-    function loadDarkModePreference() {
-      const darkMode = localStorage.getItem('darkMode');
-      if (darkMode === 'enabled') {
-        document.body.classList.add('dark-mode');
-        const icon = document.getElementById('dark-mode-icon');
-        if (icon) icon.textContent = '☀️';
-      }
-    }
-    
-    // Load preference on page load
-    loadDarkModePreference();
-
-    if (window.location.hash) {
-      const page = window.location.hash.substring(1);
-      const pageElement = document.getElementById(`${page}-page`);
-      if (pageElement) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        pageElement.classList.add('active');
-        
-        const pages = ['home', 'features', 'analyze', 'dashboard', 'gallery', 'contact', 'login'];
-        const index = pages.indexOf(page);
-        if (index >= 0) {
-          document.querySelectorAll('.sidebar-dot').forEach(dot => dot.classList.remove('active'));
-          const dots = document.querySelectorAll('.sidebar-dot');
-          if (dots[index]) dots[index].classList.add('active');
-        }
-      }
-    }
-
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities: (config) => ({
-          recolorables: [
-            {
-              get: () => config.background_color || defaultConfig.background_color,
-              set: (value) => {
-                config.background_color = value;
-                window.elementSdk.setConfig({ background_color: value });
-              }
-            },
-            {
-              get: () => config.surface_color || defaultConfig.surface_color,
-              set: (value) => {
-                config.surface_color = value;
-                window.elementSdk.setConfig({ surface_color: value });
-              }
-            },
-            {
-              get: () => config.text_color || defaultConfig.text_color,
-              set: (value) => {
-                config.text_color = value;
-                window.elementSdk.setConfig({ text_color: value });
-              }
-            },
-            {
-              get: () => config.primary_action_color || defaultConfig.primary_action_color,
-              set: (value) => {
-                config.primary_action_color = value;
-                window.elementSdk.setConfig({ primary_action_color: value });
-              }
-            },
-            {
-              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
-              set: (value) => {
-                config.secondary_action_color = value;
-                window.elementSdk.setConfig({ secondary_action_color: value });
-              }
-            }
-          ],
-          borderables: [],
-          fontEditable: {
-            get: () => config.font_family || defaultConfig.font_family,
-            set: (value) => {
-              config.font_family = value;
-              window.elementSdk.setConfig({ font_family: value });
-            }
-          },
-          fontSizeable: {
-            get: () => config.font_size || defaultConfig.font_size,
-            set: (value) => {
-              config.font_size = value;
-              window.elementSdk.setConfig({ font_size: value });
-            }
-          }
-        }),
-        mapToEditPanelValues: (config) => new Map([
-          ["site_title", config.site_title || defaultConfig.site_title],
-          ["tagline", config.tagline || defaultConfig.tagline],
-          ["hero_description", config.hero_description || defaultConfig.hero_description],
-          ["cta_button", config.cta_button || defaultConfig.cta_button],
-          ["contact_email", config.contact_email || defaultConfig.contact_email],
-          ["contact_phone", config.contact_phone || defaultConfig.contact_phone]
-        ])
-      });
-    }
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a00d25b30019a64',t:'MTc2MzM5OTIxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+ </body>
 </html>
