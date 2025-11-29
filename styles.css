@@ -37,12 +37,36 @@ body {
     }
     
     .card-hover {
+      position: relative;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform, box-shadow;
     }
     
     .card-hover:hover {
       transform: translateY(-12px) scale(1.02);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      z-index: 10;
+    }
+    
+    /* Specific fix for dashboard analysis cards to prevent flickering */
+    #dashboard-page .space-y-6 {
+      position: relative;
+      /* Add extra spacing to account for hover transform */
+      padding-top: 0.5rem;
+    }
+    
+    #dashboard-page .space-y-6 > .card-hover {
+      position: relative;
+      isolation: isolate;
+      transform-origin: center center;
+      /* Ensure each card maintains its space */
+      display: block;
+    }
+    
+    #dashboard-page .space-y-6 > .card-hover:hover {
+      z-index: 20;
+      /* Reduce transform slightly for dashboard cards to prevent overlap */
+      transform: translateY(-8px) scale(1.01);
     }
     
     .nav-item {
@@ -353,6 +377,96 @@ body {
     .dark-mode-toggle:hover span {
       transform: rotate(20deg);
     }
-  
+    
+    /* Mobile menu styles */
+    #mobile-menu-btn {
+      position: relative;
+    }
+    
+    #mobile-menu {
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+    }
+    
+    #mobile-menu a {
+      transition: all 0.2s ease;
+    }
+    
+    #mobile-menu a:active {
+      background-color: #f3f4f6;
+    }
+    
+    /* Dark mode for mobile menu */
+    body.dark-mode #mobile-menu {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    
+    body.dark-mode #mobile-menu a {
+      color: #e2e8f0 !important;
+    }
+    
+    body.dark-mode #mobile-menu a:hover {
+      background-color: #334155 !important;
+    }
+    
+    body.dark-mode #mobile-menu a:active {
+      background-color: #475569 !important;
+    }
+    
+    body.dark-mode #mobile-menu .border-gray-200 {
+      border-color: #334155 !important;
+    }
+    
+    body.dark-mode #mobile-lang-switcher {
+      background-color: #334155 !important;
+      color: #e2e8f0 !important;
+    }
+    
+    body.dark-mode #mobile-lang-switcher:hover {
+      background-color: #475569 !important;
+    }
+    
+    body.dark-mode #mobile-lang-menu {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    
+    body.dark-mode #mobile-lang-menu button {
+      color: #e2e8f0 !important;
+    }
+    
+    body.dark-mode #mobile-lang-menu button:hover {
+      background-color: #334155 !important;
+    }
+    
+    body.dark-mode #mobile-menu-btn {
+      color: #e2e8f0 !important;
+    }
+    
+    body.dark-mode #mobile-menu-btn:hover {
+      background-color: #334155 !important;
+    }
+    
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      header nav {
+        position: relative;
+      }
+      
+      #mobile-menu {
+        position: fixed;
+        top: 73px;
+        left: 0;
+        right: 0;
+        max-height: calc(100vh - 73px);
+        z-index: 45;
+      }
+      
+      /* Ensure mobile menu button is visible */
+      #mobile-menu-btn {
+        z-index: 50;
+      }
+    }
 
 @view-transition { navigation: auto; }

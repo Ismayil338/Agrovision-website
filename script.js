@@ -104,6 +104,12 @@
         langSwitcher.textContent = currentLanguage.toUpperCase();
       }
       
+      // Update mobile language switcher
+      const mobileLangSwitcher = document.getElementById('mobile-current-lang');
+      if (mobileLangSwitcher) {
+        mobileLangSwitcher.textContent = currentLanguage.toUpperCase();
+      }
+      
       // Update sign in button
       const signInBtn = document.getElementById('sign-in-btn');
       if (signInBtn && !signInBtn.textContent.includes('@')) {
@@ -125,6 +131,11 @@
       localStorage.setItem('language', lang);
       updateTranslations();
       toggleLanguageMenu();
+      // Close mobile language menu if open
+      const mobileLangMenu = document.getElementById('mobile-lang-menu');
+      if (mobileLangMenu) {
+        mobileLangMenu.classList.add('hidden');
+      }
     }
 
     function toggleLanguageMenu() {
@@ -133,6 +144,62 @@
         menu.classList.toggle('hidden');
       }
     }
+    
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const closeIcon = document.getElementById('close-icon');
+      
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('hidden');
+        if (menuIcon && closeIcon) {
+          menuIcon.classList.toggle('hidden');
+          closeIcon.classList.toggle('hidden');
+        }
+      }
+    }
+    
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const closeIcon = document.getElementById('close-icon');
+      
+      if (mobileMenu) {
+        mobileMenu.classList.add('hidden');
+        if (menuIcon && closeIcon) {
+          menuIcon.classList.remove('hidden');
+          closeIcon.classList.add('hidden');
+        }
+      }
+    }
+    
+    function toggleMobileLanguageMenu() {
+      const menu = document.getElementById('mobile-lang-menu');
+      if (menu) {
+        menu.classList.toggle('hidden');
+      }
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileLangMenu = document.getElementById('mobile-lang-menu');
+      const mobileLangBtn = document.getElementById('mobile-lang-switcher');
+      
+      if (mobileMenu && !mobileMenu.contains(event.target) && !mobileMenuBtn?.contains(event.target)) {
+        if (!mobileMenu.classList.contains('hidden')) {
+          closeMobileMenu();
+        }
+      }
+      
+      if (mobileLangMenu && !mobileLangMenu.contains(event.target) && !mobileLangBtn?.contains(event.target)) {
+        if (!mobileLangMenu.classList.contains('hidden')) {
+          mobileLangMenu.classList.add('hidden');
+        }
+      }
+    });
 
     // Close language menu when clicking outside
     document.addEventListener('click', (e) => {
